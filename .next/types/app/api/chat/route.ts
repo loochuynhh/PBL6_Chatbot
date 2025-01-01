@@ -1,8 +1,8 @@
 // File: /home/lochuynh/Documents/frontend/src/app/api/chat/route.ts
-import * as entry from '../../../../../src/app/api/chat/route.js'
+import * as entry from '../../../../../app/api/chat/route.js'
 import type { NextRequest } from 'next/server.js'
 
-type TEntry = typeof import('../../../../../src/app/api/chat/route.js')
+type TEntry = typeof import('../../../../../app/api/chat/route.js')
 
 type SegmentParams<T extends Object = any> = T extends Record<string, any>
   ? { [K in keyof T]: T[K] extends string ? string | string[] | undefined : never }
