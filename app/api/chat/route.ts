@@ -1,10 +1,32 @@
+import Cors from 'cors';
 import { NextResponse } from 'next/server';
 import { GoogleGenerativeAI } from '@google/generative-ai';
+
+// Khởi tạo cors middleware
+const cors = Cors({
+  methods: ['GET', 'POST'],
+  origin: '*', // Cho phép mọi origin
+});
+
+// Middleware wrapper cho Next.js API
+function runMiddleware(req: Request, fn: any) {
+  return new Promise((resolve, reject) => {
+    fn(req, { end: () => {} }, (result: any) => {
+      if (result instanceof Error) {
+        return reject(result);
+      }
+      return resolve(result);
+    });
+  });
+}
 
 const GEMINI_API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY; // Load your API key from environment variables
 
 export async function POST(req: Request) {
   try {
+    // Chạy middleware CORS
+    await runMiddleware(req, cors);
+
     const { userInput } = await req.json();
 
     // Initialize the Google Generative AI client
