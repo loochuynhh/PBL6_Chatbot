@@ -16,10 +16,21 @@ export async function POST(req: Request) {
 
     // Return the response from Gemini AI as JSON
     return NextResponse.json({ reply: result.response.text() });
-  } catch (error) {
-    console.error('Error:', error);
+  } catch (error: any) {
+    console.error('Error details:', {
+      message: error.message,
+      stack: error.stack,
+      name: error.name,
+      status: error.status || 'No status available',
+    });
+
+    // Return a more detailed error message in the response
     return NextResponse.json(
-      { error: 'There was an issue processing your request.' },
+      { 
+        error: 'There was an issue processing your request.',
+        details: error.message || 'Unknown error occurred.',
+        stack: process.env.NODE_ENV === 'development' ? error.stack : undefined // Show stack trace in development only
+      },
       { status: 500 }
     );
   }
