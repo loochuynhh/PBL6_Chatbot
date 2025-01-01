@@ -1,20 +1,21 @@
 import { NextResponse } from 'next/server';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
-const GEMINI_API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY; // Load API key từ environment variables
+const GEMINI_API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
+
+export async function OPTIONS() {
+  return new NextResponse(null, {
+    status: 204,
+    headers: {
+      'Access-Control-Allow-Origin': '*', // Cho phép mọi origin
+      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS', // Các method được phép
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization', // Các header được phép
+    },
+  });
+}
 
 export async function POST(req: Request) {
   try {
-    // Kiểm tra CORS thủ công
-    const origin = req.headers.get('origin') || '*';
-    const allowedOrigins = ['*']; // Danh sách origin được phép, sửa lại nếu cần
-    if (!allowedOrigins.includes('*') && !allowedOrigins.includes(origin)) {
-      return NextResponse.json(
-        { error: 'Origin not allowed by CORS policy' },
-        { status: 403 }
-      );
-    }
-
     const { userInput } = await req.json();
 
     // Khởi tạo Google Generative AI client
@@ -31,6 +32,8 @@ export async function POST(req: Request) {
         status: 200,
         headers: {
           'Access-Control-Allow-Origin': '*', // Cho phép mọi origin
+          'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+          'Access-Control-Allow-Headers': 'Content-Type, Authorization',
           'Content-Type': 'application/json',
         },
       }
@@ -50,7 +53,7 @@ export async function POST(req: Request) {
           details: error.message || 'Unknown error occurred.',
           GEMINI_API_KEY: GEMINI_API_KEY,
           stack:
-            process.env.NODE_ENV === 'development' ? error.stack : undefined, // Hiển thị stack trace chỉ trong môi trường development
+            process.env.NODE_ENV === 'development' ? error.stack : undefined,
         },
         { status: 500 }
       );
