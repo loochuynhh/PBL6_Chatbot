@@ -1,7 +1,0 @@
-{
-  "/api/chat/route": "app/api/chat/route.js",
-  "/favicon.ico/route": "app/favicon.ico/route.js",
-  "/_not-found/page": "app/_not-found/page.js",
-  "/page": "app/page.js",
-  "/lawbot/page": "app/lawbot/page.js"
-}
