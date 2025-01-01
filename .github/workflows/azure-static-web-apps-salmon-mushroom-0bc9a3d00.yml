@@ -19,7 +19,13 @@ jobs:
         with:
           submodules: true
           lfs: false
-      - name: Build And Deploy
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'  # Đảm bảo Node.js phiên bản phù hợp với dự án của bạn
+      - name: Install Dependencies
+        run: npm install --legacy-peer-deps  # Thêm tùy chọn này để bỏ qua xung đột peer dependencies
+      - name: Build And Deploy  
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
         with:
